@@ -1,2 +1,2 @@
-# JARVIS-Vertual-Assistant-for-Window
+# JARVIS-Virtual-Assistant-for-Window
  
