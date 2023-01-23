@@ -235,6 +235,34 @@ def Extract_Day_Of_Week_From_Day(day):
         return "Sunday"
 
 
+def Extract_Month_of_the_Year(month):
+
+    if month == 1:
+        return "January"
+    elif month == 2:
+        return "February"
+    elif month == 3:
+        return "March"
+    elif month == 4:
+        return "April"
+    elif month == 5:
+        return "May"
+    elif month == 6:
+        return "June"
+    elif month == 7:
+        return "July"
+    elif month == 8:
+        return "August"
+    elif month == 9:
+        return "September"
+    elif month == 10:
+        return "October"
+    elif month == 11:
+        return "November"
+    elif month == 12:
+        return "Descember"
+
+
 def FetchDate():
     current_time = datetime.datetime.now()
     dd = current_time.day
@@ -243,8 +271,10 @@ def FetchDate():
     weekday = current_time.weekday()
 
     DayOfWeek = Extract_Day_Of_Week_From_Day(current_time)
-    
+    MonthOfYear = Extract_Month_of_the_Year(mm)
 
+
+# Fetch System time
 
 FetchDate()
 Greetings()
