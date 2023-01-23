@@ -4,7 +4,6 @@
 import pyttsx3  # for TTS
 import speech_recognition as sr  # For Speech Recognition
 import datetime  # For finding the Date
-import time  # for finding the time
 import cv2  # for opening camera and taking photos
 import random  # for piking random responses
 import os  # for accessing and opering on the Operating System
@@ -15,7 +14,6 @@ from requests import get  # use the get function
 import wikipedia  # for gettingh results from wikipedia
 import webbrowser  # To Open Links to specific web pages in the default web browser
 import pywhatkit  # to Send messages on Whats App andďto open videos on YouTube
-import smtplib  # for sending emails and performing other SMTP functions
 
 
 # Global Variables
@@ -219,10 +217,36 @@ def FetchDay():
         SpeakOutput("The Current Date is Sunday")
 
 
+def Extract_Day_Of_Week_From_Day(day):
+    day = day.weekday()
+    if day == 0:
+        return "Monday"
+    elif day == 1:
+        return "Tuesday"
+    elif day == 2:
+        return "Wednessday"
+    elif day == 3:
+        return "Thursday"
+    elif day == 4:
+        return "Friday"
+    elif day == 5:
+        return "Saturday"
+    elif day == 6:
+        return "Sunday"
+
+
 def FetchDate():
     current_time = datetime.datetime.now()
+    dd = current_time.day
+    mm = current_time.month
+    yyyy = current_time.year
+    weekday = current_time.weekday()
+
+    DayOfWeek = Extract_Day_Of_Week_From_Day(current_time)
+    
 
 
+FetchDate()
 Greetings()
 
 query = TakUserInput().lower()
