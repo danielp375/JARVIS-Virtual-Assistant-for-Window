@@ -4,6 +4,7 @@
 import pyttsx3  # for TTS
 import speech_recognition as sr  # For Speech Recognition
 import datetime  # For finding the Date
+import time  # Feting the time from the system
 import cv2  # for opening camera and taking photos
 import random  # for piking random responses
 import os  # for accessing and opering on the Operating System
@@ -16,6 +17,7 @@ import urllib
 from urllib import request  # Used to check internet connection
 import webbrowser  # To Open Links to specific web pages in the default web browser
 import pywhatkit  # to Send messages on Whats App andďto open videos on YouTube
+import psutil  # Fetch Battery Information
 
 
 # Global Variables
@@ -236,19 +238,19 @@ def FetchMonth():
 def FetchDay():
     weekday = datetime.datetime.now().weekday()
     if weekday == 0:
-        SpeakOutput("The Current Date is Monday")
+        SpeakOutput("Today is is Monday")
     elif weekday == 1:
-        SpeakOutput("The Current Date is Tuesday")
+        SpeakOutput("Today is Tuesday")
     elif weekday == 2:
-        SpeakOutput("The Current Date is Wednessday")
+        SpeakOutput("Today is Wednessday")
     elif weekday == 3:
-        SpeakOutput("The Current Date is Thirsday")
+        SpeakOutput("Today is Thirsday")
     elif weekday == 4:
-        SpeakOutput("The Current Date is Friday")
+        SpeakOutput("Today is Friday")
     elif weekday == 5:
-        SpeakOutput("The Current Date is Saturday")
+        SpeakOutput("Today is Saturday")
     elif weekday == 6:
-        SpeakOutput("The Current Date is Sunday")
+        SpeakOutput("Today is Sunday")
 
 
 def Extract_Day_Of_Week_From_Day(day):
@@ -310,10 +312,23 @@ def FetchDate():
     SpeakOutput("Today is "+DayOfWeek + " "+str(dd) +
                 " "+MonthOfYear+" "+str(yyyy))
 
+
 # Fetch System time
+def FetchTime():
+    Time_hour = datetime.datetime.now()
+    # %I is used for outputing Hours in 12 Hours Format
+    # %M is used to output Minits
+    # %p is used to display AMM/PM
+
+    Time_hour_12 = Time_hour.strftime("%I:%M %p")
+    SpeakOutput("The time is "+Time_hour_12)
 
 
-FetchDate()
+def BatteryLevel():
+    Battery = psutil.sensors_battery()
+    SpeakOutput("Your Computer is at "+str(Battery.percent)+" %")
+
+
 Greetings()
 
 query = TakUserInput().lower()
@@ -360,6 +375,8 @@ elif "year" in query:
     FetchYear()
 elif "date" in query:
     FetchDate()
+elif "battery" in query:
+    BatteryLevel()
 
 elif "no thinks " in query:
     SpeakOutput("Thank You for using "+botname+" Have a good day")
