@@ -101,31 +101,33 @@ def TakePhoto():
     imageCounter = 0
     flag = True
     while flag:
-        ret, frames = webcam.read()
-        if not ret:
-            print("Failed to grab image")
-            SpeakOutput("Failed to Capture")
-            flag = False
-            break
-        cv2.imshow("Image Capture Window", frames)
+        if 1:
+            ret, frames = webcam.read()
+            if not ret:
+                print("Failed to grab image")
+                SpeakOutput("Failed to Capture")
+                flag = False
+                break
+            cv2.imshow("Image Capture Window", frames)
 
-        # Close webcame when presing the ESC key
-        k = cv2.waitKey(50)
+            # Close webcame when presing the ESC key
+            k = cv2.waitKey(50)
 
-        # Take Screenshort when space key is pressed
-        if k == 32:
-            imagename = f"image_{imageCounter}.png"
-            winsound.PlaySound('sound\camera-shutter.wav', winsound.SND_ASYNC)
-            cv2.imwrite(imagename, frames)
-            print("Image Captured")
+            # Take Screenshort when space key is pressed
+            if k == 32:
+                imagename = f"image_{imageCounter}.png"
+                winsound.PlaySound(
+                    'sound\camera-shutter.wav', winsound.SND_ASYNC)
+                cv2.imwrite(imagename, frames)
+                print("Image Captured")
 
-            imageCounter += 1
-        # CLose the camera when ESC key is pressed
-        elif k == 27:
-            webcam.release()
-            cv2.destroyAllWindows()
-            ret = False
-            break
+                imageCounter += 1
+            # CLose the camera when ESC key is pressed
+            elif k == 27:
+                webcam.release()
+                cv2.destroyAllWindows()
+                ret = False
+                break
 
 # Open Applications
 
