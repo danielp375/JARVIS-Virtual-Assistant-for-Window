@@ -307,7 +307,6 @@ def FetchDate():
     DayOfWeek = Extract_Day_Of_Week_From_Day(current_time)
     MonthOfYear = Extract_Month_of_the_Year(mm)
 
-    print("Today is "+DayOfWeek + " "+str(dd)+" "+MonthOfYear+" "+str(yyyy))
     SpeakOutput("Today is "+DayOfWeek + " "+str(dd) +
                 " "+MonthOfYear+" "+str(yyyy))
 
