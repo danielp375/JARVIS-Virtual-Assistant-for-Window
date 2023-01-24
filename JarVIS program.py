@@ -12,6 +12,8 @@ import winsound  # for playing sound files using wav file formats on Windows
 import requests  # for finding IP Address
 from requests import get  # use the get function
 import wikipedia  # for gettingh results from wikipedia
+import urllib
+from urllib import request  # Used to check internet connection
 import webbrowser  # To Open Links to specific web pages in the default web browser
 import pywhatkit  # to Send messages on Whats App andďto open videos on YouTube
 
@@ -28,6 +30,16 @@ def SpeakOutput(message):
     engine.say(message)
     print(message)
     engine.runAndWait()
+
+
+def CheckInternet():
+    try:
+        testurl = "https://www.google.co.in/"
+        urllib.request.urlopen(testurl)
+        return True
+    except urllib.error.URLError as e:
+        print(str(e))
+        return False
 
 
 def TakUserInput():
@@ -114,28 +126,43 @@ def OpenChome():
 
 
 def GetSystemIPAddress():
-    ip = get("https://api.ipify.org").text
-    SpeakOutput(f"Your Public IP Address is {ip}")
+    if CheckInternet():
+        ip = get("https://api.ipify.org").text
+        SpeakOutput(f"Your Public IP Address is {ip}")
+    else:
+        SpeakOutput("Your System is not connected to the Internet")
 
 
 def Searchwikipedia(query):
-    SpeakOutput("Searching wikipedia")
-    query = query.replace("wikipedia", "")
-    result = wikipedia.summary(query, sentences=5)
-    SpeakOutput("According to wikipedia...")
-    SpeakOutput(result)
+    if CheckInternet():
+        SpeakOutput("Searching wikipedia")
+        query = query.replace("wikipedia", "")
+        result = wikipedia.summary(query, sentences=5)
+        SpeakOutput("According to wikipedia...")
+        SpeakOutput(result)
+    else:
+        SpeakOutput("Sorry !There is no Internet")
 
 
 def OpenYouTube():
-    webbrowser.open_new_tab('youtube.com')
+    if CheckInternet():
+        webbrowser.open_new_tab('youtube.com')
+    else:
+        SpeakOutput("Sorry! There is no Internet")
 
 
 def OpenAmazon():
-    webbrowser.open_new_tab('https://www.amazon.in/')
+    if CheckInternet():
+        webbrowser.open_new_tab('https://www.amazon.in/')
+    else:
+        SpeakOutput("Sorry! There is no Internet")
 
 
 def GoogleSearch():
-    webbrowser.open_new_tab("google.com")
+    if CheckInternet():
+        webbrowser.open_new_tab("google.com")
+    else:
+        SpeakOutput("Sorry !There is no Internet")
 
 
 def GetUserAccountName():
@@ -145,25 +172,32 @@ def GetUserAccountName():
 
 
 def SendWhatsAppMessage():
-    SpeakOutput("Enter Phone Number with Country Code")
-    phoneno = input("Enter Phone Number with Country Code")
+    if CheckInternet():
+        SpeakOutput("Enter Phone Number with Country Code")
+        phoneno = input("Enter Phone Number with Country Code")
 
-    SpeakOutput("Speek the Message that you want to send")
-    message = TakUserInput()
+        SpeakOutput("Speek the Message that you want to send")
+        message = TakUserInput()
 
-    pywhatkit.sendwhatmsg_instantly(phoneno, message)
-    print("Message Sent")
-    SpeakOutput(message+" was sent Successfully to "+phoneno)
+        pywhatkit.sendwhatmsg_instantly(phoneno, message)
+        print("Message Sent")
+        SpeakOutput(message+" was sent Successfully to "+phoneno)
+    else:
+        SpeakOutput("Sorry! There is no Internet")
 
 
 def PlayVidoesOnYouTube():
-    SpeakOutput("Mention the name of the Video to Play")
-    VideoName = TakUserInput()
-    pywhatkit.playonyt(VideoName)
-    SpeakOutput("Sure Playing "+VideoName + " from Youtube")
-
+    if CheckInternet():
+        SpeakOutput("Mention the name of the Video to Play")
+        VideoName = TakUserInput()
+        pywhatkit.playonyt(VideoName)
+        SpeakOutput("Sure Playing "+VideoName + " from Youtube")
+    else:
+        SpeakOutput("Sorry! There is no Internet")
 
 # Get Date and Time from System
+
+
 def FetchYear():
     current_time = datetime.datetime.now()
     year = current_time.year
@@ -273,8 +307,12 @@ def FetchDate():
     DayOfWeek = Extract_Day_Of_Week_From_Day(current_time)
     MonthOfYear = Extract_Month_of_the_Year(mm)
 
+    print("Today is "+DayOfWeek + " "+str(dd)+" "+MonthOfYear+" "+str(yyyy))
+    SpeakOutput("Today is "+DayOfWeek + " "+str(dd) +
+                " "+MonthOfYear+" "+str(yyyy))
 
 # Fetch System time
+
 
 FetchDate()
 Greetings()
@@ -321,6 +359,8 @@ elif "month" in query:
     FetchMonth()
 elif "year" in query:
     FetchYear()
+elif "date" in query:
+    FetchDate()
 
 elif "no thinks " in query:
     SpeakOutput("Thank You for using "+botname+" Have a good day")
