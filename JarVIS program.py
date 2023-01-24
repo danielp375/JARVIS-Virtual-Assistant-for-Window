@@ -4,7 +4,6 @@
 import pyttsx3  # for TTS
 import speech_recognition as sr  # For Speech Recognition
 import datetime  # For finding the Date
-import time  # Feting the time from the system
 import cv2  # for opening camera and taking photos
 import random  # for piking random responses
 import os  # for accessing and opering on the Operating System
@@ -16,12 +15,21 @@ import wikipedia  # for gettingh results from wikipedia
 import urllib
 from urllib import request  # Used to check internet connection
 import webbrowser  # To Open Links to specific web pages in the default web browser
-import pywhatkit  # to Send messages on Whats App andďto open videos on YouTube
+try:
+    import pywhatkit  # to Send messages on Whats App andďto open videos on YouTube
+except Exception as e:
+    print("Import Failed")
 import psutil  # Fetch Battery Information
 
 
 # Global Variables
 botname = "JARVIS"
+
+
+# GUI Components
+#
+# Adapts for Light and Dark Mode in System
+
 
 # initialize tts engine
 engine = pyttsx3.init()
@@ -46,20 +54,27 @@ def CheckInternet():
 
 def TakUserInput():
     # function to take input form user
+
     r = sr.Recognizer()
     with sr.Microphone() as mic:
         print("listening...")
         winsound.PlaySound('sound\Speech On.wav', winsound.SND_ASYNC)
         r.pause_threshold = 1
+        r.adjust_for_ambient_noise(mic, 0.2)
         audio = r.listen(source=mic, timeout=1, phrase_time_limit=60)
         try:
-            winsound.PlaySound('sound\Speech Off.wav', winsound.SND_ASYNC)
-            UserQuery = r.recognize_google(audio, language='en-in')
+            if CheckInternet():
+                winsound.PlaySound(
+                    'sound\Speech Off.wav', winsound.SND_ASYNC)
+                UserQuery = r.recognize_google(audio, language='en-in')
+            else:
+                SpeakOutput(
+                    "Please Connect to the Internet and Try Again ")
         except sr.UnknownValueError:
-            SpeakOutput("Say that again")
             return "none"
         except sr.RequestError:
             SpeakOutput("Say that again")
+            return "none"
     return UserQuery
 
 
@@ -164,7 +179,7 @@ def GoogleSearch():
     if CheckInternet():
         webbrowser.open_new_tab("google.com")
     else:
-        SpeakOutput("Sorry !There is no Internet")
+        SpeakOutput("Sorry! There is no Internet")
 
 
 def GetUserAccountName():
@@ -331,53 +346,58 @@ def BatteryLevel():
 
 Greetings()
 
-query = TakUserInput().lower()
 
-if "command prompt" in query:
-    SpeakOutput("Sure")
-    OpenCMD()
-elif "cmd" in query:
-    SpeakOutput("Sure")
-    OpenCMD()
+while True:
+    query = TakUserInput().lower()
+    if "command prompt" in query or "cmd" in query:
+        SpeakOutput("Sure")
+        OpenCMD()
+    elif "cmd" in query:
+        SpeakOutput("Sure")
+        OpenCMD()
 
-elif "google chrome" in query:
-    SpeakOutput("Sure")
-    OpenChome()
-elif "chrome" in query:
-    SpeakOutput("Sure")
-    OpenChome()
-elif "camera" in query:
-    SpeakOutput("Sure Press ESC to close and Space to Capture")
-    TakePhoto()
-elif "what is my ip" in query:
-    SpeakOutput("Sure")
-    GetSystemIPAddress()
-elif "wikipedia" in query:
-    Searchwikipedia(query=query)
-elif "youtube" in query:
-    SpeakOutput("Sure Opening YouTube")
-    OpenYouTube()
-elif "amazon" in query:
-    SpeakOutput("Sure Opening Amazon India")
-    OpenAmazon()
-elif "google" in query:
-    GoogleSearch()
-elif "whatsapp" in query:
-    SendWhatsAppMessage()
-elif "online video" in query:
-    PlayVidoesOnYouTube()
+    elif "google chrome" in query:
+        SpeakOutput("Sure")
+        OpenChome()
+    elif "chrome" in query:
+        SpeakOutput("Sure")
+        OpenChome()
+    elif "camera" in query:
+        SpeakOutput("Sure Press ESC to close and Space to Capture")
+        TakePhoto()
+    elif "what is my ip" in query:
+        SpeakOutput("Sure")
+        GetSystemIPAddress()
+    elif "wikipedia" in query:
+        Searchwikipedia(query=query)
+    elif "youtube" in query:
+        SpeakOutput("Sure Opening YouTube")
+        OpenYouTube()
+    elif "amazon" in query:
+        SpeakOutput("Sure Opening Amazon India")
+        OpenAmazon()
+    elif "google" in query:
+        GoogleSearch()
+    elif "whatsapp" in query:
+        SendWhatsAppMessage()
+    elif "online video" in query:
+        PlayVidoesOnYouTube()
 
-elif "day" in query:
-    FetchDay()
-elif "month" in query:
-    FetchMonth()
-elif "year" in query:
-    FetchYear()
-elif "date" in query:
-    FetchDate()
-elif "battery" in query:
-    BatteryLevel()
+    elif "what day is today" in query:
+        FetchDay()
+    elif "month" in query:
+        FetchMonth()
+    elif "year" in query:
+        FetchYear()
+    elif "date" in query:
+        FetchDate()
+    elif "battery" in query:
+        BatteryLevel()
 
-elif "no thinks " in query:
-    SpeakOutput("Thank You for using "+botname+" Have a good day")
-    sys.exit()
+    elif "time" in query:
+        FetchTime()
+
+    elif "no thinks " in query or "no" in query:
+        SpeakOutput("Thank You for using "+botname+" Have a good day")
+        sys.exit()
+    SpeakOutput("Do you have any other question...")
