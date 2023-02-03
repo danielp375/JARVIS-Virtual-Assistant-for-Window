@@ -78,6 +78,11 @@ def TakUserInput():
     return UserQuery
 
 
+def GetUserLogin_Username():
+    # Get User Login Name
+    return os.getlogin()
+
+
 def Greetings():
     # Function to greet the user depending on the time of day
     hour = int(datetime.datetime.now().hour)
@@ -346,6 +351,15 @@ def BatteryLevel():
     SpeakOutput("Your Computer is at "+str(Battery.percent)+" %")
 
 
+def MyName():
+    username = GetUserLogin_Username()
+    SpeakOutput("I am talking to "+username)
+
+
+def Yourname():
+    SpeakOutput("My Name is "+botname)
+
+
 Greetings()
 
 
@@ -398,6 +412,10 @@ while True:
 
     elif "time" in query:
         FetchTime()
+    elif "your name" in query:
+        Yourname()
+    elif "my name" in query:
+        MyName()
 
     elif "no thinks " in query or "no" in query:
         SpeakOutput("Thank You for using "+botname+" Have a good day")
